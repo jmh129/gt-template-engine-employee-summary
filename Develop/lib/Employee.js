@@ -1,5 +1,6 @@
 // TODO: Write code to define and export the Employee class
 
+// Parent class for Manager, Engineer, Intern.
 class Employee {
   constructor(name, id, email) {
     this.name = name;
