@@ -1,23 +1,99 @@
-// const Manager = require("./lib/Manager");
-// const Engineer = require("./lib/Engineer");
-// const Intern = require("./lib/Intern");
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
-// const fs = require("fs");
+const fs = require("fs");
 
-// const OUTPUT_DIR = path.resolve(__dirname, "output");
-// const outputPath = path.join(OUTPUT_DIR, "team.html");
+const OUTPUT_DIR = path.resolve(__dirname, "output");
+const outputPath = path.join(OUTPUT_DIR, "team.html");
 
-// const render = require("./lib/htmlRenderer");
-// const { listenerCount } = require("process");
+const render = require("./lib/htmlRenderer");
+const { listenerCount } = require("process");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+const managerPrompt = [
+  {
+    type: "input",
+    message: "Please enter the name of the manager.",
+    name: "name",
+  },
+  {
+    type: "input",
+    message: "Please enter the ID of the manager.",
+    name: "id",
+  },
+  {
+    type: "input",
+    message: "Please enter a valid email address for the manager.",
+    name: "email",
+  },
+  {
+    type: "input",
+    message: "Please enter the office number for the manager.",
+    name: "officeNumber",
+  },
+  {
+    type: "list",
+    name: "addEmployee",
+    message: "Would you like to add another employee?",
+    choices: ["Yes", "No"],
+  },
+];
+
+const engineerPrompt = [
+  {
+    type: "input",
+    message: "Please enter the name of the engineer.",
+    name: "name",
+  },
+  {
+    type: "input",
+    message: "Please enter the ID of the engineer.",
+    name: "id",
+  },
+  {
+    type: "input",
+    message: "Please enter a valid email address for the engineer.",
+    name: "email",
+  },
+  {
+    type: "list",
+    name: "addEmployee",
+    message: "Would you like to add another employee?",
+    choices: ["Yes", "No"],
+  },
+];
+
+const internPrompt = [
+  {
+    type: "input",
+    message: "Please enter the name of the intern?",
+    name: "name",
+  },
+  {
+    type: "input",
+    message: "Please enter the ID of the intern.",
+    name: "id",
+  },
+  {
+    type: "input",
+    message: "Please enter a valid email address for the intern.",
+    name: "email",
+  },
+  {
+    type: "list",
+    name: "addEmployee",
+    message: "Would you like to add another employee?",
+    choices: ["Yes", "No"],
+  },
+];
 
 inquirer
   .prompt([
     {
-      type: "rawlist",
+      type: "list",
       name: "role",
       message: "What is the role of the employee?",
       choices: ["Manager", "Engineer", "Intern"],
@@ -25,14 +101,14 @@ inquirer
   ])
   .then((answers) => {
     if (answers.role === "Manager") {
-      console.log("Asking you Manager Questions.");
+      inquirer.prompt(managerPrompt);
     } else if (answers.role === "Engineer") {
-      console.log("Asking you Engineer questions.");
+      inquirer.prompt(engineerPrompt);
     } else {
-      console.log("Asking you Intern questions.");
+      inquirer.prompt(internPrompt);
     }
-    console.info("Answer:", answers.role);
   });
+
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
