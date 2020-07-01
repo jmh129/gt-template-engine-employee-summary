@@ -131,7 +131,7 @@ function buildTeam() {
       });
     } else {
       inquirer.prompt(internPrompt).then((internInfo) => {
-        let newEngineer = new Engineer(
+        let newIntern = new Intern(
           internInfo.name,
           internInfo.id,
           internInfo.email,
