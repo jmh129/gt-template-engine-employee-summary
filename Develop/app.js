@@ -11,8 +11,18 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 const { listenerCount } = require("process");
 
+var teamList = [];
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+const initPrompt = [
+  {
+    type: "list",
+    name: "role",
+    message: "What is the role of the employee?",
+    choices: ["Manager", "Engineer", "Intern"],
+  },
+];
+
 const managerPrompt = [
   {
     type: "input",
@@ -59,6 +69,11 @@ const engineerPrompt = [
     name: "email",
   },
   {
+    type: "input",
+    message: "Please enter a valid github username for the engineer.",
+    name: "github",
+  },
+  {
     type: "list",
     name: "addEmployee",
     message: "Would you like to add another employee?",
@@ -90,25 +105,46 @@ const internPrompt = [
   },
 ];
 
-inquirer
-  .prompt([
-    {
-      type: "list",
-      name: "role",
-      message: "What is the role of the employee?",
-      choices: ["Manager", "Engineer", "Intern"],
-    },
-  ])
-  .then((answers) => {
+function buildTeam() {
+  inquirer.prompt(initPrompt).then((answers) => {
     if (answers.role === "Manager") {
-      inquirer.prompt(managerPrompt);
+      inquirer.prompt(managerPrompt).then((managerInfo) => {
+        let teamManager = new Manager(
+          managerInfo.name,
+          managerInfo.id,
+          managerInfo.email,
+          managerInfo.officeNumber
+        );
+        teamList.push(teamManager);
+        console.log(teamList);
+      });
     } else if (answers.role === "Engineer") {
-      inquirer.prompt(engineerPrompt);
+      inquirer.prompt(engineerPrompt).then((engineerInfo) => {
+        let newEngineer = new Engineer(
+          engineerInfo.name,
+          engineerInfo.id,
+          engineerInfo.email,
+          engineerInfo.github
+        );
+        teamList.push(newEngineer);
+        console.log(teamList);
+      });
     } else {
-      inquirer.prompt(internPrompt);
+      inquirer.prompt(internPrompt).then((internInfo) => {
+        let newEngineer = new Engineer(
+          internInfo.name,
+          internInfo.id,
+          internInfo.email,
+          internInfo.school
+        );
+        teamList.push(newIntern);
+        console.log(teamList);
+      });
     }
   });
+}
 
+buildTeam();
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
