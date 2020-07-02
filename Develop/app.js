@@ -38,11 +38,27 @@ const managerPrompt = [
     type: "input",
     message: "Please enter a valid email address for the manager.",
     name: "email",
+    validate: function (input) {
+      const re = /\S+@\S+\.\S+/
+      if (re.test(input)) {
+        return true;
+      } else {
+        return "Invalid email.";
+      }
+    },
   },
   {
     type: "input",
     message: "Please enter the office number for the manager.",
     name: "officeNumber",
+    validate: function (input) {
+        const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
+        if (re.test(input)) {
+          return true;
+        } else {
+          return "Invalid email.";
+        }
+      },
   },
   {
     type: "list",
@@ -98,6 +114,11 @@ const internPrompt = [
     name: "email",
   },
   {
+    type: "input",
+    message: "Please enter a the school the intern attends.",
+    name: "school",
+  },
+  {
     type: "list",
     name: "addEmployee",
     message: "Would you like to add another employee?",
@@ -107,18 +128,29 @@ const internPrompt = [
 
 function buildTeam() {
   inquirer.prompt(initPrompt).then((answers) => {
+    console.log(answers);
     if (answers.role === "Manager") {
-      inquirer.prompt(managerPrompt).then((managerInfo) => {
-        let teamManager = new Manager(
-          managerInfo.name,
-          managerInfo.id,
-          managerInfo.email,
-          managerInfo.officeNumber
-        );
-        teamList.push(teamManager);
-        console.log(teamList);
-        fs.writeFileSync("output.html", render(teamList), "utf8");
-      });
+      inquirer
+        .prompt(managerPrompt)
+        .then((managerInfo) => {
+          console.log("manger info", managerInfo);
+          let teamManager = new Manager(
+            managerInfo.name,
+            managerInfo.id,
+            managerInfo.email,
+            managerInfo.officeNumber
+          );
+          teamList.push(teamManager);
+          if (managerInfo.addEmployee === "Yes") {
+            buildTeam();
+          } else {
+            console.log(teamList);
+            fs.writeFileSync("output.html", render(teamList), "utf8");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else if (answers.role === "Engineer") {
       inquirer.prompt(engineerPrompt).then((engineerInfo) => {
         let newEngineer = new Engineer(
@@ -128,8 +160,12 @@ function buildTeam() {
           engineerInfo.github
         );
         teamList.push(newEngineer);
-        console.log(teamList);
-        fs.writeFileSync("output.html", render(teamList), "utf8");
+        if (engineerInfo.addEmployee === "Yes") {
+          buildTeam();
+        } else {
+          console.log(teamList);
+          fs.writeFileSync("output.html", render(teamList), "utf8");
+        }
       });
     } else {
       inquirer.prompt(internPrompt).then((internInfo) => {
@@ -140,8 +176,12 @@ function buildTeam() {
           internInfo.school
         );
         teamList.push(newIntern);
-        console.log(teamList);
-        fs.writeFileSync("output.html", render(teamList), "utf8");
+        if (internInfo.addEmployee === "Yes") {
+          buildTeam();
+        } else {
+          console.log(teamList);
+          fs.writeFileSync("output.html", render(teamList), "utf8");
+        }
       });
     }
   });
