@@ -1,4 +1,5 @@
 # Template Engine - Employee Summary
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Introduction
 This CLI was created as a project for the Georgia Tech Coding Full-Stack program. The goal was of this project was to create a CLI that generates an html file containing the team list from the CLI input. This project makes use of Node.js, Inquirer and Jest. 
 
