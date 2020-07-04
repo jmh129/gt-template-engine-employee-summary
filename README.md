@@ -23,6 +23,7 @@ Example Demo:
 Example Output: ![Alt Text](https://github.com/jmh129/gt-template-engine-employee-summary/blob/master/Develop/Images/Output-example.png?raw=true)
 
 NPM Test Output:
+
 ![](Develop/Images/NPM-test.gif)
 
 ### Credits
