@@ -149,7 +149,6 @@ function buildTeam() {
       inquirer
         .prompt(managerPrompt)
         .then((managerInfo) => {
-          console.log("manger info", managerInfo);
           let teamManager = new Manager(
             managerInfo.name,
             managerInfo.id,
