@@ -39,11 +39,11 @@ const managerPrompt = [
     message: "Please enter a valid email address for the manager.",
     name: "email",
     validate: function (input) {
-      const re = /\S+@\S+\.\S+/
+      const re = /\S+@\S+\.\S+/;
       if (re.test(input)) {
         return true;
       } else {
-        return "Invalid email.";
+        return "Invalid email. Please re-enter.";
       }
     },
   },
@@ -52,13 +52,13 @@ const managerPrompt = [
     message: "Please enter the office number for the manager.",
     name: "officeNumber",
     validate: function (input) {
-        const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/
-        if (re.test(input)) {
-          return true;
-        } else {
-          return "Invalid email.";
-        }
-      },
+      const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+      if (re.test(input)) {
+        return true;
+      } else {
+        return "Invalid office number. Please re-enter a valid office number. ";
+      }
+    },
   },
   {
     type: "list",
@@ -83,10 +83,18 @@ const engineerPrompt = [
     type: "input",
     message: "Please enter a valid email address for the engineer.",
     name: "email",
+    validate: function (input) {
+      const re = /\S+@\S+\.\S+/;
+      if (re.test(input)) {
+        return true;
+      } else {
+        return "Invalid email. Please re-renter";
+      }
+    },
   },
   {
     type: "input",
-    message: "Please enter a valid github username for the engineer.",
+    message: "Please enter a github username for the engineer.",
     name: "github",
   },
   {
@@ -112,6 +120,14 @@ const internPrompt = [
     type: "input",
     message: "Please enter a valid email address for the intern.",
     name: "email",
+    validate: function (input) {
+      const re = /\S+@\S+\.\S+/;
+      if (re.test(input)) {
+        return true;
+      } else {
+        return "Invalid email. Please re-enter. ";
+      }
+    },
   },
   {
     type: "input",
@@ -144,66 +160,60 @@ function buildTeam() {
           if (managerInfo.addEmployee === "Yes") {
             buildTeam();
           } else {
-            console.log(teamList);
-            fs.writeFileSync("output.html", render(teamList), "utf8");
+            fs.writeFileSync("team.html", render(teamList), "utf8");
           }
         })
         .catch((err) => {
           console.log(err);
         });
     } else if (answers.role === "Engineer") {
-      inquirer.prompt(engineerPrompt).then((engineerInfo) => {
-        let newEngineer = new Engineer(
-          engineerInfo.name,
-          engineerInfo.id,
-          engineerInfo.email,
-          engineerInfo.github
-        );
-        teamList.push(newEngineer);
-        if (engineerInfo.addEmployee === "Yes") {
-          buildTeam();
-        } else {
-          console.log(teamList);
-          fs.writeFileSync("output.html", render(teamList), "utf8");
-        }
-      });
+      inquirer
+        .prompt(engineerPrompt)
+        .then((engineerInfo) => {
+          let newEngineer = new Engineer(
+            engineerInfo.name,
+            engineerInfo.id,
+            engineerInfo.email,
+            engineerInfo.github
+          );
+          teamList.push(newEngineer);
+          if (engineerInfo.addEmployee === "Yes") {
+            buildTeam();
+          } else {
+            fs.writeFileSync("team.html", render(teamList), "utf8");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      inquirer.prompt(internPrompt).then((internInfo) => {
-        let newIntern = new Intern(
-          internInfo.name,
-          internInfo.id,
-          internInfo.email,
-          internInfo.school
-        );
-        teamList.push(newIntern);
-        if (internInfo.addEmployee === "Yes") {
-          buildTeam();
-        } else {
-          console.log(teamList);
-          fs.writeFileSync("output.html", render(teamList), "utf8");
-        }
-      });
+      inquirer
+        .prompt(internPrompt)
+        .then((internInfo) => {
+          let newIntern = new Intern(
+            internInfo.name,
+            internInfo.id,
+            internInfo.email,
+            internInfo.school
+          );
+          teamList.push(newIntern);
+          if (internInfo.addEmployee === "Yes") {
+            buildTeam();
+          } else {
+            fs.writeFileSync("team.html", render(teamList), "utf8");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
 }
 
 buildTeam();
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
 render(teamList);
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
