@@ -210,3 +210,4 @@ function buildTeam() {
 
 buildTeam();
 render(teamList);
+
