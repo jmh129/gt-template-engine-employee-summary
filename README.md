@@ -17,9 +17,13 @@ Clone this repo to your local machine using https://github.com/jmh129/gt-templat
 The application is for anyone that needs to quickly generate a team list using their terminal. The user will need to navigate in their terminal to the folder the files are in. Then, enter in node app.js. The prompts will appear in the terminal and the user can give its input. After the prompts have been answered a seperate file named team.html will appear. 
 
 Example Demo:
+
 ![](Develop/Images/Using-CLI.gif)
 
-Example Output: https://github.com/jmh129/gt-readme-generator/blob/master/user_readme.md
+Example Output: ![Alt Text](https://github.com/jmh129/gt-template-engine-employee-summary/blob/master/Develop/Images/Output-example.png?raw=true)
+
+NPM Test Output:
+![](Develop/Images/NPM-test.gif)
 
 ### Credits
 Credit to the Georgia Institute of Technology Coding Bootcamp for the instruction for the assignemnt. 
