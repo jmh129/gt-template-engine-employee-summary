@@ -49,14 +49,14 @@ const managerPrompt = [
   },
   {
     type: "input",
-    message: "Please enter the office number for the manager.",
+    message: "Please enter the office number for the manager. Example: 1234567890",
     name: "officeNumber",
     validate: function (input) {
       const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
       if (re.test(input)) {
         return true;
       } else {
-        return "Invalid office number. Please re-enter a valid office number. ";
+        return "Invalid office number. Please re-enter a valid office number. Example: 1234567890";
       }
     },
   },
